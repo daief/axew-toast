@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["esnext", "dom"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "downlevelIteration": true
+  },
+  "include": ["src/**/*", "dev/**/*"]
+}
