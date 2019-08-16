@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "dev": "jugg dev -p 8880",
+    "dev": "jugg dev -p 8880 -C .juggrc.dev.ts",
     "dist": "HARD_SOURCE=none jugg build",
     "lib": "jugg lib",
-    "build": "yarn dist && yarn lib"
+    "build": "yarn dist && yarn lib",
+    "build:example": "HARD_SOURCE=none jugg build -C .juggrc.dev.ts"
   },
   "devDependencies": {
     "@axew/jugg": "0.1.1",
