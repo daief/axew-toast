@@ -4,6 +4,6 @@ node_js:
   - "12"
 script:
   - yarn build:example
-  - bash ./deploy-to-github.sh
+  - bash ./deploy-example.sh
 cache:
   yarn: true
