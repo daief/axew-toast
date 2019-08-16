@@ -65,10 +65,16 @@ function createDiv(className: string): HTMLDivElement {
  * @param el 动画目标元素
  * @param rootEl 根元素
  */
-function removeEl(el: HTMLElement, rootEl: HTMLElement) {
+function removeEl(
+  el: HTMLElement,
+  rootEl: HTMLElement,
+  opts: Exclude<IOptions, boolean | string>,
+) {
   const remove = () => {
     document.body.removeChild(rootEl);
-    modalCount -= 1;
+    if (opts.isModal) {
+      modalCount -= 1;
+    }
     if (modalCount <= 0) {
       hideModal();
     }
@@ -112,17 +118,16 @@ export default function toast(
     };
   }
   if (typeof opts === 'string') {
-    opts = {
-      text: opts,
-    };
+    opts = { text: opts };
   }
-
   if (typeof opts === 'boolean') {
-    opts = {
-      loading: opts,
-    };
+    opts = { loading: opts };
   }
 
+  const options = {
+    timeout: argTimeout || 2500,
+    ...opts,
+  };
   const {
     timeout,
     text = '',
@@ -130,37 +135,30 @@ export default function toast(
     loading = false,
     onClick,
     isModal = false,
-  } = {
-    timeout: argTimeout || 2500,
-    ...opts,
-  };
+  } = options;
 
   const container = createDiv(`${containerClassName} ${className}`);
   const content = createDiv(contentClassName);
   const wrap = createDiv(wrapClassName);
+  let resolve: any;
+  let reject: any;
+  let timer: any;
 
   if (typeof onClick === 'function') {
     wrap.addEventListener('click', onClick, onClick.options);
   }
 
-  let resolve: any;
-  let reject: any;
-  let timer: any;
-
   const promise = new Promise((_r1, _r2) => {
     wrap.innerHTML = loading
-      ? `
-      <i class="${loadingClassName}"></i>
-    `
-      : `
-      <p class="${textClassName}">${text}</p>
-    `;
+      ? `<i class="${loadingClassName}"></i>`
+      : `<p class="${textClassName}">${text}</p>`;
 
     content.appendChild(wrap);
-
     if (isModal) {
-      modalDiv = modalDiv || createDiv(modalClassName);
-      document.body.appendChild(modalDiv);
+      if (!modalDiv) {
+        modalDiv = modalDiv || createDiv(modalClassName);
+        document.body.appendChild(modalDiv);
+      }
       showModal();
     }
 
@@ -170,9 +168,9 @@ export default function toast(
     reject = _r2;
     timer = setTimeout(resolve, timeout);
   })
-    .then(() => removeEl(content, container))
+    .then(() => removeEl(content, container, options))
     .catch(() => {
-      removeEl(content, container);
+      removeEl(content, container, options);
       throw new Error(`${PREFIX} - canceled.`);
     });
 

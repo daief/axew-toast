@@ -2,6 +2,7 @@
 
 .@{prefix} {
   &-container {
+    position: fixed;
     z-index: 99999;
   }
 
@@ -13,6 +14,8 @@
     text-align: center;
     animation: axewToastFadeInUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1
       normal forwards;
+    pointer-events: none;
+    touch-action: none;
   }
 
   &-wrap {
@@ -21,6 +24,8 @@
     display: inline-block;
     border-radius: 6px;
     max-width: 80%;
+    pointer-events: auto;
+    touch-action: auto;
   }
 
   &-modal {
