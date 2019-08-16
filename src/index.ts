@@ -70,7 +70,12 @@ function removeEl(
   rootEl: HTMLElement,
   opts: Exclude<IOptions, boolean | string>,
 ) {
+  let isCalled = false;
   const remove = () => {
+    if (isCalled) {
+      return;
+    }
+    isCalled = true;
     document.body.removeChild(rootEl);
     if (opts.isModal) {
       modalCount -= 1;
@@ -154,11 +159,11 @@ export default function toast(
       : `<p class="${textClassName}">${text}</p>`;
 
     content.appendChild(wrap);
+    if (isModal && !modalDiv) {
+      modalDiv = modalDiv || createDiv(modalClassName);
+      document.body.appendChild(modalDiv);
+    }
     if (isModal) {
-      if (!modalDiv) {
-        modalDiv = modalDiv || createDiv(modalClassName);
-        document.body.appendChild(modalDiv);
-      }
       showModal();
     }
 
