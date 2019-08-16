@@ -6,42 +6,57 @@
  */
 import toast from '../src';
 
-const LONG_TEXT =
-  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+const select = (_: string) => document.querySelector(_) as any;
 
-toast({
-  text: LONG_TEXT,
-  timeout: 4000,
-  isModal: true,
-  onClick: () => {
-    console.log('xxx');
-  },
+const $toast: HTMLButtonElement = select('#toast');
+const $cancel: HTMLButtonElement = select('#cancel');
+let queue: any[] = [];
+
+const getRadioValue = (name: string) => {
+  const value = select(`input[name=${name}]:checked`).value;
+  return value === 'true';
+};
+
+const getInputValue = (name: string) => {
+  return (select(`input[name=${name}]`) || select(`textarea[name=${name}]`))
+    .value;
+};
+
+$toast.addEventListener('click', () => {
+  const text = getInputValue('text');
+  const loading = getRadioValue('loading');
+  const timeout = +getInputValue('timeout') || 0;
+  const isModal = getRadioValue('isModal');
+  const className = getInputValue('className');
+  const onClick = getInputValue('onClick');
+
+  const { cancel, promise } = toast({
+    text,
+    loading,
+    timeout,
+    isModal,
+    className,
+    onClick: () => {
+      try {
+        eval(onClick);
+      } catch (_) {
+        //
+      }
+    },
+  });
+  promise.then(() => {
+    const i = queue.findIndex(_ => cancel);
+    if (i > -1) {
+      queue[i] = null;
+      queue = queue.filter(_ => !!_);
+    }
+  });
+  queue.push(cancel);
 });
 
-toast({
-  loading: true,
-  timeout: 5000,
-  isModal: true,
-  onClick: () => {
-    console.log('xxxxx11');
-  },
+$cancel.addEventListener('click', () => {
+  const first = queue.shift();
+  if (first) {
+    first();
+  }
 });
-
-setTimeout(() => {
-  // cancel();
-}, 1000);
-
-// const m = async () => {
-//   for (let index = 0; index < 10; index++) {
-//
-//     await new Promise(reslove => setTimeout(reslove, 1000));
-
-//     if (index % 2 === 0) {
-//       toast(true, 10 * 1000);
-//     } else {
-//       toast(LONG_TEXT, 10 * 1000);
-//     }
-//   }
-// };
-
-// m();

@@ -6,13 +6,79 @@
  -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>axew/toast</title>
+  <style>
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-block;
+      font-size: 18px;
+      line-height: 28px;
+      text-align: center;
+      padding: 0 10px;
+      border: 1px solid grey;
+      border-radius: 5px;
+      margin: 7px;
+      outline: none;
+      color: #fff;
+      background: #66ccff;
+    }
+    button:active {
+      outline: none;
+      background-color: #6bbde6;
+    }
+  </style>
 </head>
+
 <body>
-  <button>button</button>
+  <table border="border">
+    <tr>
+      <td>text</td>
+      <td>
+        <textarea type="text" name="text" value="">text text text text text</textarea>
+      </td>
+    </tr>
+    <tr>
+      <td>loading</td>
+      <td>
+        <input type="radio" name="loading" value="false" checked />false
+        <input type="radio" name="loading" value="true" />true
+      </td>
+    </tr>
+    <tr>
+      <td>timeout</td>
+      <td><input type="text" name="timeout" value="2500" /></td>
+    </tr>
+    <tr>
+      <td>isModal</td>
+      <td>
+        <input type="radio" name="isModal" value="false" checked />false
+        <input type="radio" name="isModal" value="true" />true
+      </td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td><input type="text" name="className" value="" /></td>
+    </tr>
+    <tr>
+      <td>onClick</td>
+      <td>
+        <textarea type="text" name="onClick" value="">
+          console.log('clicked')
+        </textarea>
+      </td>
+    </tr>
+  </table>
+
+  <button id="toast">toast</button>
+  <br />
+  <button id="cancel">cancel</button>
+  <br />
 </body>
+
 </html>
