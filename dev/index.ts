@@ -9,9 +9,9 @@ import toast from '../src';
 const LONG_TEXT =
   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
-const { cancel } = toast({
+toast({
   text: LONG_TEXT,
-  timeout: 400000,
+  timeout: 4000,
   isModal: true,
   onClick: () => {
     console.log('xxx');
@@ -20,7 +20,7 @@ const { cancel } = toast({
 
 toast({
   loading: true,
-  timeout: 400000,
+  timeout: 5000,
   isModal: true,
   onClick: () => {
     console.log('xxxxx11');
@@ -33,7 +33,7 @@ setTimeout(() => {
 
 // const m = async () => {
 //   for (let index = 0; index < 10; index++) {
-//     // eslint-disable-next-line
+//
 //     await new Promise(reslove => setTimeout(reslove, 1000));
 
 //     if (index % 2 === 0) {

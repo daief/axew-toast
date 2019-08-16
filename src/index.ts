@@ -15,6 +15,8 @@ const hideClassName = PREFIX + '-hide';
 const textClassName = PREFIX + '-text';
 const loadingClassName = PREFIX + '-loading';
 const modalClassName = PREFIX + '-modal';
+let modalDiv: HTMLElement | null = null;
+let modalCount = 0;
 
 export interface IEventHandler {
   (this: HTMLDivElement, ev: MouseEvent): void;
@@ -64,15 +66,31 @@ function createDiv(className: string): HTMLDivElement {
  * @param rootEl 根元素
  */
 function removeEl(el: HTMLElement, rootEl: HTMLElement) {
+  const remove = () => {
+    document.body.removeChild(rootEl);
+    modalCount -= 1;
+    if (modalCount <= 0) {
+      hideModal();
+    }
+  };
   el.setAttribute('class', `${contentClassName} ${hideClassName}`);
-  el.addEventListener('animationend', () => {
-    document.body.removeChild(rootEl);
-  });
+  el.addEventListener('animationend', remove);
   // force remove
-  setTimeout(() => {
-    // 以防 animationend 未触发
-    document.body.removeChild(rootEl);
-  }, ANIMATE_DURATION);
+  // 以防 animationend 未触发
+  setTimeout(remove, ANIMATE_DURATION);
+}
+
+function showModal() {
+  if (modalDiv) {
+    modalDiv.style.display = 'block';
+    modalCount += 1;
+  }
+}
+
+function hideModal() {
+  if (modalDiv) {
+    modalDiv.style.display = 'none';
+  }
 }
 
 /**
@@ -117,7 +135,6 @@ export default function toast(opts: IOptions, argTimeout?: number) {
   let reject: any;
   let timer: any;
 
-  // eslint-disable-next-line
   const promise = new Promise((_r1, _r2) => {
     wrap.innerHTML = loading
       ? `
@@ -130,12 +147,13 @@ export default function toast(opts: IOptions, argTimeout?: number) {
     content.appendChild(wrap);
 
     if (isModal) {
-      container.appendChild(createDiv(modalClassName));
+      modalDiv = modalDiv || createDiv(modalClassName);
+      document.body.appendChild(modalDiv);
+      showModal();
     }
+
     container.appendChild(content);
-
     document.body.appendChild(container);
-
     resolve = _r1;
     reject = _r2;
     timer = setTimeout(resolve, timeout);
