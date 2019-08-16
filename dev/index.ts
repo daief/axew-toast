@@ -40,7 +40,7 @@ $toast.addEventListener('click', () => {
       try {
         eval(onClick);
       } catch (_) {
-        //
+        console.warn('Click event handler has some error', _);
       }
     },
   });

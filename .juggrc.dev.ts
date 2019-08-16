@@ -8,6 +8,7 @@ import { extendConfig } from '@axew/jugg';
 import { join } from 'path';
 
 export default extendConfig({
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   outputDir: 'example',
   webpack: ({ config }) => {
     config.entry('dev').add(join(__dirname, 'dev/index'));
