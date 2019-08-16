@@ -2,6 +2,8 @@
 
 `@axew/toast` is a html toast component.
 
+Demo as <https://daief.tech/axew-toast/>.
+
 ## Usage
 
 Install.

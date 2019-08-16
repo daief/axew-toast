@@ -1,6 +1,6 @@
 {
   "name": "@axew/toast",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.1",
   "license": "MIT",
   "scripts": {
     "dev": "jugg dev -p 8880 -C .juggrc.dev.ts",
@@ -22,5 +22,12 @@
     "dist",
     "lib",
     "es"
-  ]
+  ],
+  "keywords": [
+    "toast",
+    "typescript",
+    "popup",
+    "notifications"
+  ],
+  "description": "A simple toast component"
 }
