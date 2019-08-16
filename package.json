@@ -17,5 +17,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  }
+  },
+  "files": [
+    "dist",
+    "lib",
+    "es"
+  ]
 }
