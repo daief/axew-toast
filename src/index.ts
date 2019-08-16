@@ -98,7 +98,19 @@ function hideModal() {
  * @param opts
  * @param argTimeout
  */
-export default function toast(opts: IOptions, argTimeout?: number) {
+export default function toast(
+  opts: IOptions,
+  argTimeout?: number,
+): {
+  promise: Promise<void>;
+  cancel: () => void;
+} {
+  if (typeof window === 'undefined') {
+    return {
+      promise: Promise.resolve(),
+      cancel: () => void 0,
+    };
+  }
   if (typeof opts === 'string') {
     opts = {
       text: opts,
