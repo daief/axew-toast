@@ -1,7 +1,9 @@
 {
   "name": "@axew/toast",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
   "scripts": {
     "dev": "jugg dev -p 8880 -C .juggrc.dev.ts",
     "dist": "HARD_SOURCE=none jugg build",
