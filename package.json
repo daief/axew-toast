@@ -1,6 +1,6 @@
 {
   "name": "@axew/toast",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./es/index.js",
@@ -31,5 +31,11 @@
     "popup",
     "notifications"
   ],
-  "description": "A simple toast component"
+  "description": "A simple toast component",
+  "homepage": "https://github.com/daief/axew-toast",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daief/axew-toast"
+  },
+  "author": "daief <https://github.com/daief>"
 }
