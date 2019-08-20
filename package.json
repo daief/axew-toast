@@ -1,6 +1,6 @@
 {
   "name": "@axew/toast",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./es/index.js",
@@ -9,6 +9,7 @@
     "dist": "HARD_SOURCE=none jugg build",
     "lib": "jugg lib",
     "build": "yarn dist && yarn lib",
+    "prepublishOnly": "yarn build",
     "build:example": "HARD_SOURCE=none jugg build -C .juggrc.dev.ts"
   },
   "devDependencies": {
