@@ -37,7 +37,7 @@ export type IOptions =
        * 延迟
        * @default 2500
        */
-      timeout?: number;
+      timeout?: number | true;
       /**
        * 是否模态
        */
@@ -109,7 +109,7 @@ function hideModal() {
  */
 export default function toast(
   opts: IOptions,
-  argTimeout?: number,
+  argTimeout?: number | true,
 ): {
   promise: Promise<void>;
   cancel: () => void;
@@ -169,7 +169,9 @@ export default function toast(
     document.body.appendChild(container);
     resolve = _r1;
     reject = _r2;
-    timer = setTimeout(resolve, timeout);
+    if (typeof timeout === 'number') {
+      timer = setTimeout(resolve, timeout);
+    }
   })
     .then(() => removeEl(content, container, options))
     .catch(() => {

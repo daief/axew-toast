@@ -24,6 +24,9 @@ toast('This a message', 3000);
 // loading style
 toast(true, 3000);
 
+// loading style, always display
+toast(true, true);
+
 // or pass a options
 toast({
   loading: true,
@@ -53,7 +56,7 @@ API.
 ```ts
 function toast(
   opts: IOptions,
-  argTimeout?: number | undefined,
+  argTimeout?: number | true,
 ): {
   promise: Promise<void>;
   cancel: () => void;
@@ -83,9 +86,10 @@ type IOptions =
        */
       loading?: boolean;
       /**
+       * when `true`, toast will not disappear
        * @default 2500
        */
-      timeout?: number;
+      timeout?: number | true;
       /**
        * is a modal toast
        */

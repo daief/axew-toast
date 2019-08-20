@@ -26,7 +26,8 @@ const getInputValue = (name: string) => {
 $toast.addEventListener('click', () => {
   const text = getInputValue('text');
   const loading = getRadioValue('loading');
-  const timeout = +getInputValue('timeout') || 0;
+  let timeout = getInputValue('timeout');
+  timeout = timeout === 'true' ? true : +timeout || 0;
   const isModal = getRadioValue('isModal');
   const className = getInputValue('className');
   const onClick = getInputValue('onClick');
