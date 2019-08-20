@@ -5,6 +5,7 @@
  * @Description: 用于调试
  */
 import toast from '../src';
+import '../src/style';
 
 const select = (_: string) => document.querySelector(_) as any;
 

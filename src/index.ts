@@ -4,8 +4,6 @@
  * @Date: 2019-08-15 15:45:34
  * @Description:
  */
-import './style';
-
 const ANIMATE_DURATION = 500;
 const PREFIX = 'axew-toast';
 const containerClassName = PREFIX + '-container';
