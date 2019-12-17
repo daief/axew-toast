@@ -2,15 +2,13 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:26:51
- * @LastEditTime: 2019-12-17 17:18:34
+ * @LastEditTime: 2019-12-17 18:54:15
  * @Description:
  */
 import { createDiv, isBrowser } from './helper';
 import { MODAL_CLASS_NAME } from './constant';
 
 export class ModalCtrl {
-  static instance: ModalCtrl;
-
   modalDiv!: HTMLDivElement;
 
   /**
@@ -19,14 +17,9 @@ export class ModalCtrl {
   modalCount = 0;
 
   constructor() {
-    if (!ModalCtrl.instance) {
-      ModalCtrl.instance = this;
-      if (isBrowser()) {
-        this.modalDiv = createDiv(MODAL_CLASS_NAME);
-      }
+    if (isBrowser()) {
+      this.modalDiv = createDiv(MODAL_CLASS_NAME);
     }
-
-    return ModalCtrl.instance;
   }
 
   showModal() {

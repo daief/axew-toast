@@ -2,12 +2,10 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 17:29:27
- * @LastEditTime: 2019-12-17 18:41:01
+ * @LastEditTime: 2019-12-17 20:16:28
  * @Description:
  */
 import { IQueueItem } from './interface';
-import { createToastElAndShow, removeEl } from './helper';
-import { MAX_TIMEOUT } from './constant';
 
 export class Queue {
   private queue: IQueueItem[] = [];
@@ -29,24 +27,8 @@ export class Queue {
     this.lock = true;
     let item: IQueueItem | void;
     while ((item = this.front())) {
-      const { options, resolve, promise } = item;
-      const { timeout } = options;
-      const elements = createToastElAndShow(options);
-
-      let timer: any;
-      Promise.resolve().then(() => {
-        if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
-          timer = setTimeout(resolve, timeout);
-        }
-      });
-
-      await promise
-        .then(() => removeEl(elements.content, elements.container, options))
-        .catch(() => {
-          // canceled
-          clearTimeout(timer);
-          removeEl(elements.content, elements.container, options);
-        });
+      const { onExcute } = item;
+      await onExcute();
     }
     this.lock = false;
   }

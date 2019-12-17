@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:14:34
- * @LastEditTime: 2019-12-17 18:06:07
+ * @LastEditTime: 2019-12-17 20:08:56
  * @Description:
  */
 export interface IEventHandler {
@@ -47,7 +47,6 @@ export interface IToastResult {
 
 export interface IQueueItem {
   options: Required<IObjectOptions>;
-  resolve: any;
-  reject: any;
   promise: Promise<void>;
+  onExcute: () => any;
 }
