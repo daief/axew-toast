@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:14:34
- * @LastEditTime: 2019-12-17 16:15:31
+ * @LastEditTime: 2019-12-17 17:08:08
  * @Description:
  */
 export interface IEventHandler {
@@ -39,3 +39,8 @@ export interface IObjectOptions {
 }
 
 export type IOptions = true | string | IObjectOptions;
+
+export interface IToastResult {
+  promise: Promise<void>;
+  cancel: () => void;
+}

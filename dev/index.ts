@@ -7,6 +7,9 @@
 import toast from '../src';
 import '../src/style';
 
+// @ts-ignore
+window.axewToast = toast;
+
 const select = (_: string) => document.querySelector(_) as any;
 
 const $toast: HTMLButtonElement = select('#toast');

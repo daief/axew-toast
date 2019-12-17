@@ -1,133 +1,41 @@
 /*
  * @Author: daief
  * @LastEditors: daief
- * @Date: 2019-08-15 15:45:34
+ * @Date: 2019-12-17 17:06:54
+ * @LastEditTime: 2019-12-17 17:21:17
  * @Description:
  */
-import { IOptions } from './interface';
-import { guardOptions } from './helper';
+import { IOptions, IToastResult } from './interface';
+import { guardOptions, createToastEl, removeEl, isBrowser } from './helper';
+import { MAX_TIMEOUT, PREFIX } from './constant';
 
-const ANIMATE_DURATION = 500;
-const PREFIX = 'axew-toast';
-const containerClassName = PREFIX + '-container';
-const wrapClassName = PREFIX + '-wrap';
-const contentClassName = PREFIX + '-content';
-const hideClassName = PREFIX + '-hide';
-const textClassName = PREFIX + '-text';
-const loadingClassName = PREFIX + '-loading';
-const modalClassName = PREFIX + '-modal';
-let modalDiv: HTMLElement | null = null;
-let modalCount = 0;
-
-function createDiv(className: string): HTMLDivElement {
-  const el = document.createElement('div');
-  el.setAttribute('class', className);
-  return el;
-}
-
-/**
- * 监听动画，动画结束时移除元素
- * @param el 动画目标元素
- * @param rootEl 根元素
- */
-function removeEl(
-  el: HTMLElement,
-  rootEl: HTMLElement,
-  opts: Exclude<IOptions, boolean | string>,
-) {
-  let isCalled = false;
-  const remove = () => {
-    if (isCalled) {
-      return;
-    }
-    isCalled = true;
-    document.body.removeChild(rootEl);
-    if (opts.isModal) {
-      modalCount -= 1;
-    }
-    if (modalCount <= 0) {
-      hideModal();
-    }
-  };
-  el.setAttribute('class', `${contentClassName} ${hideClassName}`);
-  el.addEventListener('animationend', remove);
-  // force remove
-  // 以防 animationend 未触发
-  setTimeout(remove, ANIMATE_DURATION);
-}
-
-function showModal() {
-  if (modalDiv) {
-    modalDiv.style.display = 'block';
-    modalCount += 1;
-  }
-}
-
-function hideModal() {
-  if (modalDiv) {
-    modalDiv.style.display = 'none';
-  }
-}
-
-/**
- * 调用 toast
- * @param opts
- * @param argTimeout
- */
 export default function toast(
   opts: IOptions,
   argTimeout?: number | true,
-): {
-  promise: Promise<void>;
-  cancel: () => void;
-} {
+): IToastResult {
   // SSR safe
-  if (typeof window === 'undefined') {
+  if (!isBrowser()) {
     return {
       promise: Promise.resolve(),
       cancel: () => void 0,
     };
   }
-
   const options = guardOptions(opts, argTimeout);
-  const { timeout, text, className, loading, onClick, isModal } = options;
+  const { timeout } = options;
 
-  const container = createDiv(`${containerClassName} ${className}`);
-  const content = createDiv(contentClassName);
-  const wrap = createDiv(wrapClassName);
-  let resolve: any;
   let reject: any;
   let timer: any;
 
-  if (onClick) {
-    wrap.addEventListener('click', onClick, onClick.options);
-  }
-
-  const promise = new Promise((_r1, _r2) => {
-    wrap.innerHTML = loading
-      ? `<i class="${loadingClassName}"></i>`
-      : `<p class="${textClassName}">${text}</p>`;
-
-    content.appendChild(wrap);
-    if (isModal && !modalDiv) {
-      modalDiv = modalDiv || createDiv(modalClassName);
-      document.body.appendChild(modalDiv);
-    }
-    if (isModal) {
-      showModal();
-    }
-
-    container.appendChild(content);
-    document.body.appendChild(container);
-    resolve = _r1;
+  const elements = createToastEl(options);
+  const promise = new Promise<void>((resolve, _r2) => {
     reject = _r2;
-    if (typeof timeout === 'number') {
+    if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
       timer = setTimeout(resolve, timeout);
     }
   })
-    .then(() => removeEl(content, container, options))
+    .then(() => removeEl(elements.content, elements.container, options))
     .catch(() => {
-      removeEl(content, container, options);
+      removeEl(elements.content, elements.container, options);
       throw new Error(`${PREFIX} - canceled.`);
     });
 
