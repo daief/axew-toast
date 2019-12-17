@@ -4,6 +4,9 @@
  * @Date: 2019-08-15 15:45:34
  * @Description:
  */
+import { IOptions } from './interface';
+import { guardOptions } from './helper';
+
 const ANIMATE_DURATION = 500;
 const PREFIX = 'axew-toast';
 const containerClassName = PREFIX + '-container';
@@ -15,42 +18,6 @@ const loadingClassName = PREFIX + '-loading';
 const modalClassName = PREFIX + '-modal';
 let modalDiv: HTMLElement | null = null;
 let modalCount = 0;
-
-export interface IEventHandler {
-  (this: HTMLDivElement, ev: MouseEvent): void;
-  options?: boolean | AddEventListenerOptions;
-}
-
-export type IOptions =
-  | true
-  | string
-  | {
-      /**
-       * 文案
-       */
-      text?: string;
-      /**
-       * 是否 loading
-       */
-      loading?: boolean;
-      /**
-       * 延迟
-       * @default 2500
-       */
-      timeout?: number | true;
-      /**
-       * 是否模态
-       */
-      isModal?: boolean;
-      /**
-       * 样式名
-       */
-      className?: string;
-      /**
-       * 点击事件
-       */
-      onClick?: IEventHandler;
-    };
 
 function createDiv(className: string): HTMLDivElement {
   const el = document.createElement('div');
@@ -114,31 +81,16 @@ export default function toast(
   promise: Promise<void>;
   cancel: () => void;
 } {
+  // SSR safe
   if (typeof window === 'undefined') {
     return {
       promise: Promise.resolve(),
       cancel: () => void 0,
     };
   }
-  if (typeof opts === 'string') {
-    opts = { text: opts };
-  }
-  if (typeof opts === 'boolean') {
-    opts = { loading: opts };
-  }
 
-  const options = {
-    timeout: argTimeout || 2500,
-    ...opts,
-  };
-  const {
-    timeout,
-    text = '',
-    className = '',
-    loading = false,
-    onClick,
-    isModal = false,
-  } = options;
+  const options = guardOptions(opts, argTimeout);
+  const { timeout, text, className, loading, onClick, isModal } = options;
 
   const container = createDiv(`${containerClassName} ${className}`);
   const content = createDiv(contentClassName);
@@ -147,7 +99,7 @@ export default function toast(
   let reject: any;
   let timer: any;
 
-  if (typeof onClick === 'function') {
+  if (onClick) {
     wrap.addEventListener('click', onClick, onClick.options);
   }
 
