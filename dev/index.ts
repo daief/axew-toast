@@ -32,10 +32,11 @@ $toast.addEventListener('click', () => {
   let timeout = getInputValue('timeout');
   timeout = timeout === 'true' ? true : +timeout || 0;
   const isModal = getRadioValue('isModal');
+  const isQueue = getRadioValue('queue');
   const className = getInputValue('className');
   const onClick = getInputValue('onClick');
 
-  const { cancel, promise } = toast({
+  const { cancel, promise } = (isQueue ? toast.queue : toast)({
     text,
     loading,
     timeout,

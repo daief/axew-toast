@@ -34,7 +34,7 @@
         outline: none;
         background-color: #6bbde6;
       }
-      input[type=text],
+      input[type='text'],
       textarea {
         box-sizing: border-box;
         margin: 0;
@@ -69,7 +69,9 @@
       <tr>
         <td>text</td>
         <td>
-          <textarea type="text" name="text" value="" rows="5">text text text text text</textarea>
+          <textarea type="text" name="text" value="" rows="5">
+text text text text text</textarea
+          >
         </td>
       </tr>
       <tr>
@@ -81,7 +83,7 @@
       </tr>
       <tr>
         <td>timeout</td>
-        <td><input type="text" name="timeout" value="2500" /></td>
+        <td><input type="text" name="timeout" value="2500"/></td>
       </tr>
       <tr>
         <td>isModal</td>
@@ -91,13 +93,22 @@
         </td>
       </tr>
       <tr>
+        <td>with queue</td>
+        <td>
+          <input type="radio" name="queue" value="false" checked />false
+          <input type="radio" name="queue" value="true" />true
+        </td>
+      </tr>
+      <tr>
         <td>className</td>
-        <td><input type="text" name="className" value="" /></td>
+        <td><input type="text" name="className" value=""/></td>
       </tr>
       <tr>
         <td>onClick</td>
         <td>
-          <textarea type="text" name="onClick" value="">console.log('clicked')</textarea>
+          <textarea type="text" name="onClick" value="">
+console.log('clicked')</textarea
+          >
         </td>
       </tr>
     </table>
