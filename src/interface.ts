@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:14:34
- * @LastEditTime: 2019-12-17 17:08:08
+ * @LastEditTime: 2019-12-17 18:06:07
  * @Description:
  */
 export interface IEventHandler {
@@ -43,4 +43,11 @@ export type IOptions = true | string | IObjectOptions;
 export interface IToastResult {
   promise: Promise<void>;
   cancel: () => void;
+}
+
+export interface IQueueItem {
+  options: Required<IObjectOptions>;
+  resolve: any;
+  reject: any;
+  promise: Promise<void>;
 }

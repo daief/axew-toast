@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:18:36
- * @LastEditTime: 2019-12-17 17:19:29
+ * @LastEditTime: 2019-12-17 17:36:15
  * @Description:
  */
 import { IOptions, IObjectOptions } from './interface';
@@ -61,7 +61,7 @@ export function cls(...arr: string[]) {
   return arr.filter(_ => !!_).join(' ');
 }
 
-export function createToastEl(options: Required<IObjectOptions>) {
+export function createToastElAndShow(options: Required<IObjectOptions>) {
   const { text, className, loading, onClick, isModal } = options;
   const container = createDiv(cls(CONTAINER_CLASS_NAME, className));
   const content = createDiv(CONTENT_CLASS_NAME);
