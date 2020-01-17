@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:25:23
- * @LastEditTime: 2019-12-17 16:54:35
+ * @LastEditTime: 2019-12-18 09:43:10
  * @Description:
  */
 export const ANIMATE_DURATION = 500;
@@ -16,3 +16,4 @@ export const LOADING_CLASS_NAME = PREFIX + '-loading';
 export const MODAL_CLASS_NAME = PREFIX + '-modal';
 // 2^31 - 1
 export const MAX_TIMEOUT = 2147483647;
+export const CANCELED_MSG = `${PREFIX} - canceled.`;

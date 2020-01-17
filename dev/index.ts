@@ -36,12 +36,13 @@ $toast.addEventListener('click', () => {
   const className = getInputValue('className');
   const onClick = getInputValue('onClick');
 
-  const { cancel, promise } = (isQueue ? toast.queue : toast)({
+  const { cancel, promise } = toast({
     text,
     loading,
     timeout,
     isModal,
     className,
+    queue: isQueue,
     onClick: () => {
       try {
         eval(onClick);

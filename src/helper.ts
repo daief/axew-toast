@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:18:36
- * @LastEditTime: 2019-12-17 17:36:15
+ * @LastEditTime: 2019-12-18 09:35:14
  * @Description:
  */
 import { IOptions, IObjectOptions } from './interface';
@@ -41,6 +41,7 @@ export function guardOptions(
     isModal: false,
     timeout: argTimeout || 2500,
     onClick: noop,
+    queue: false,
     ...opts,
   };
 
@@ -118,3 +119,8 @@ export function removeEl(
   // 以防 animationend 未触发
   setTimeout(remove, ANIMATE_DURATION);
 }
+
+export const getNoopResult = () => ({
+  promise: Promise.resolve(),
+  cancel: () => void 0,
+});

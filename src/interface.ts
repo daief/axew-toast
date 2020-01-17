@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-12-17 16:14:34
- * @LastEditTime: 2019-12-17 20:08:56
+ * @LastEditTime: 2019-12-17 20:46:11
  * @Description:
  */
 export interface IEventHandler {
@@ -36,6 +36,11 @@ export interface IObjectOptions {
    * 点击事件
    */
   onClick?: IEventHandler;
+  /**
+   * 队列模式
+   * @since 1.2.0
+   */
+  queue?: boolean;
 }
 
 export type IOptions = true | string | IObjectOptions;
@@ -46,7 +51,5 @@ export interface IToastResult {
 }
 
 export interface IQueueItem {
-  options: Required<IObjectOptions>;
-  promise: Promise<void>;
   onExcute: () => any;
 }
