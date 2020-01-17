@@ -1,8 +1,13 @@
 # @axew/toast
 
-`@axew/toast` is a html toast component.
+`@axew/toast` is a toast component.
 
-Demo as <https://daief.tech/axew-toast/>.
+- light-weight
+- promise
+- cancelable
+- non-dependence
+
+Demo at <https://daief.tech/axew-toast/>.
 
 ## Usage
 
