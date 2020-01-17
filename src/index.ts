@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors  : daief
  * @Date: 2019-12-17 17:06:54
- * @LastEditTime : 2020-01-17 14:39:11
+ * @LastEditTime : 2020-01-17 14:48:06
  * @Description:
  */
 import { IOptions, IToastResult } from './interface';
@@ -92,11 +92,14 @@ export default function toast(
  * @param argTimeout
  */
 function queueToast(opts: IOptions, argTimeout?: number | true): IToastResult {
-  const o = guardOptions(opts, argTimeout);
-  return toast({
-    queue: true,
-    ...o,
-  });
+  if (typeof opts === 'string') {
+    opts = { text: opts, queue: true };
+  } else if (typeof opts === 'boolean') {
+    opts = { loading: opts, queue: true };
+  } else if (opts && opts.queue !== void 0) {
+    opts.queue = true;
+  }
+  return toast(opts, argTimeout);
 }
 
 export { toast, queueToast };
