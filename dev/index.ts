@@ -1,10 +1,10 @@
 /*
  * @Author: daief
- * @LastEditors: daief
+ * @LastEditors  : daief
  * @Date: 2019-08-15 16:04:14
  * @Description: 用于调试
  */
-import toast from '../src';
+import toast, { queueToast } from '../src';
 import '../src/style';
 
 // @ts-ignore
@@ -14,6 +14,8 @@ const select = (_: string) => document.querySelector(_) as any;
 
 const $toast: HTMLButtonElement = select('#toast');
 const $cancel: HTMLButtonElement = select('#cancel');
+const $queue: HTMLButtonElement = select('#queue');
+
 let queue: any[] = [];
 
 const getRadioValue = (name: string) => {
@@ -66,4 +68,11 @@ $cancel.addEventListener('click', () => {
   if (first) {
     first();
   }
+});
+
+$queue.addEventListener('click', () => {
+  ['1st', '2nd', '3rd'].forEach(_ => {
+    const { cancel } = queueToast(_);
+    queue.push(cancel);
+  });
 });
