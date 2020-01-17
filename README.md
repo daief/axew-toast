@@ -15,7 +15,7 @@ $ npm i @axew/toast
 ```
 
 ```js
-import toast from '@axew/toast';
+import toast, { queueToast } from '@axew/toast';
 
 toast('This a message');
 
@@ -49,6 +49,11 @@ promise.catch(() => {
 setTimeout(() => {
   cancel();
 }, 1000);
+
+// the following toasts are queued
+queueToast('1');
+queueToast('2');
+queueToast('3');
 ```
 
 API.
@@ -102,6 +107,11 @@ type IOptions =
        * click event handler
        */
       onClick?: IEventHandler;
+      /**
+       * make toast queueable
+       * @since 1.2.0
+       */
+      queue?: boolean;
     };
 /**
  * click handler schema

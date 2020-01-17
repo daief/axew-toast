@@ -1,8 +1,8 @@
 /*
  * @Author: daief
- * @LastEditors: daief
+ * @LastEditors  : daief
  * @Date: 2019-12-17 17:06:54
- * @LastEditTime: 2019-12-18 09:45:53
+ * @LastEditTime : 2020-01-17 14:39:11
  * @Description:
  */
 import { IOptions, IToastResult } from './interface';
@@ -85,4 +85,18 @@ export default function toast(
   };
 }
 
-export { toast };
+/**
+ * default enable `queue` toast
+ * @since 1.2.0
+ * @param opts
+ * @param argTimeout
+ */
+function queueToast(opts: IOptions, argTimeout?: number | true): IToastResult {
+  const o = guardOptions(opts, argTimeout);
+  return toast({
+    queue: true,
+    ...o,
+  });
+}
+
+export { toast, queueToast };
