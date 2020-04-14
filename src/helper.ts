@@ -14,8 +14,41 @@ import {
   TEXT_CLASS_NAME,
   HIDE_CLASS_NAME,
   ANIMATE_DURATION,
+  MODAL_CLASS_NAME,
 } from './constant';
-import { modalCtrl } from './ModalCtrl';
+// import { modalCtrl } from './ModalCtrl';
+
+// 先将 ModalCtrl 移动到此处，以避免循环引用的问题
+export class ModalCtrl {
+  modalDiv!: HTMLDivElement;
+
+  /**
+   * modal show times
+   */
+  modalCount = 0;
+
+  constructor() {
+    if (isBrowser()) {
+      this.modalDiv = createDiv(MODAL_CLASS_NAME);
+    }
+  }
+
+  showModal() {
+    if (this.modalDiv) {
+      this.modalDiv.style.display = 'block';
+      this.modalCount += 1;
+    }
+  }
+
+  hideModal() {
+    this.modalCount -= 1;
+    if (this.modalDiv && this.modalCount <= 0) {
+      this.modalDiv.style.display = 'none';
+    }
+  }
+}
+
+export const modalCtrl = new ModalCtrl();
 
 export function noop() {}
 
