@@ -30,7 +30,7 @@ export default function toast(
   let resolve: any;
   let reject: any;
   let timer: any;
-  const promise = new Promise<void>((r1, r2) => {
+  let promise = new Promise<void>((r1, r2) => {
     resolve = r1;
     reject = r2;
   });
@@ -67,7 +67,7 @@ export default function toast(
     if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
       timer = setTimeout(resolve, timeout);
     }
-    promise
+    promise = promise
       .then(() => removeEl(elements.content, elements.container, options))
       .catch(() => {
         removeEl(elements.content, elements.container, options);
@@ -80,7 +80,7 @@ export default function toast(
     promise: new Promise(_ => _(promise)),
     cancel: () => {
       clearTimeout(timer);
-      reject();
+      reject(new Error(CANCELED_MSG));
     },
   };
 }
