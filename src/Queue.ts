@@ -19,6 +19,14 @@ export class Queue {
     return this.queue.shift();
   }
 
+  remove(item: IQueueItem): number {
+    const i = this.queue.findIndex(_ => _ === item);
+    if (i > -1) {
+      this.queue.splice(i, 1);
+    }
+    return i;
+  }
+
   async execute() {
     if (this.lock) {
       return;

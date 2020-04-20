@@ -21,6 +21,7 @@ export default function toast(
   argTimeout?: number | true,
 ): IToastResult {
   // SSR safe
+  // TODO maybe keep same login on server env
   if (!isBrowser()) {
     return getNoopResult();
   }
@@ -30,54 +31,80 @@ export default function toast(
   let resolve: any;
   let reject: any;
   let timer: any;
+  let elements: ReturnType<typeof createToastElAndShow>;
   let promise = new Promise<void>((r1, r2) => {
     resolve = r1;
     reject = r2;
   });
 
   if (queue) {
-    promise.catch(() => {
-      // 取消时此处一定被触发，但有两种情况
-      //  - 处于队列时就被取消了
-      //  - 弹出的过程中被取消
-      throw new Error(CANCELED_MSG);
-    });
-    queueCtrl.push({
+    let queueResolve: any;
+    let queueReject: any;
+    const queuePromise = new Promise((r1, r2) => {
+      queueResolve = r1;
+      queueReject = r2;
+    })
+      .then(() => {
+        // 队列内 promsie 结束后，改变最外层 promise 状态
+        if (elements) {
+          removeEl(elements.content, elements.container, options);
+        }
+        resolve();
+      })
+      .catch(() => {
+        // 被取消
+        clearTimeout(timer);
+        if (elements) {
+          removeEl(elements.content, elements.container, options);
+        }
+      });
+
+    const queueItem = {
       onExcute: () => {
         // 执行到此处逻辑 toast 才会显示
-        const elements = createToastElAndShow(options);
-        let timer: any;
+        elements = createToastElAndShow(options);
         if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
-          timer = setTimeout(resolve, timeout);
+          timer = setTimeout(queueResolve, timeout); // toast 执行结束
         }
-
-        return promise
-          .then(() => {
-            removeEl(elements.content, elements.container, options);
-          })
-          .catch(() => {
-            clearTimeout(timer);
-            removeEl(elements.content, elements.container, options);
-          });
+        return queuePromise;
       },
-    });
+    };
+
+    // 先存入队列
+    queueCtrl.push(queueItem);
     queueCtrl.execute();
+
+    // 外部人为调用了 cancel
+    promise = promise.catch(error => {
+      // 但有两种情况
+      //  - 处于队列时就被取消了
+      //  - 弹出的过程中被取消
+
+      // 还在队列中，则提前移除
+      queueCtrl.remove(queueItem);
+
+      // 弹出过程中无需特殊处理
+      // ---
+
+      queueReject();
+
+      throw error;
+    });
   } else {
-    const elements = createToastElAndShow(options);
+    elements = createToastElAndShow(options);
     if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
       timer = setTimeout(resolve, timeout);
     }
-    promise
+    promise = promise
       .then(() => removeEl(elements.content, elements.container, options))
-      .catch(() => {
+      .catch(error => {
         removeEl(elements.content, elements.container, options);
-        // throw new Error(CANCELED_MSG); // 不用再抛出
+        throw error;
       });
   }
 
   return {
-    // 确保后面的链式操作在该 `promise` 之后才执行
-    promise: new Promise(_ => _(promise)),
+    promise,
     cancel: () => {
       clearTimeout(timer);
       reject(new Error(CANCELED_MSG));
