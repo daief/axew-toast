@@ -67,11 +67,11 @@ export default function toast(
     if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
       timer = setTimeout(resolve, timeout);
     }
-    promise = promise
+    promise
       .then(() => removeEl(elements.content, elements.container, options))
       .catch(() => {
         removeEl(elements.content, elements.container, options);
-        throw new Error(CANCELED_MSG);
+        // throw new Error(CANCELED_MSG); // 不用再抛出
       });
   }
 
