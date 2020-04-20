@@ -10,7 +10,8 @@
     "lib": ["esnext", "dom"],
     "strict": true,
     "noUnusedLocals": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*", "dev/**/*"]
 }

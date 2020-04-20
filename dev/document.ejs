@@ -61,7 +61,19 @@
       textarea {
         height: 100px;
       }
+      footer {
+        text-align: center;
+        margin-top: 100px;
+        font-size: 14px;
+      }
+      footer a {
+        color: #6bbde6;
+      }
     </style>
+    <meta name="description" content="axew toast daief" />
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <script src="https://daief.tech/js/daief/ga.js"></script>
+    <% } %>
   </head>
 
   <body>
@@ -69,7 +81,7 @@
       <tr>
         <td>text</td>
         <td>
-          <textarea type="text" name="text" value="" rows="5">
+          <textarea type="text" name="text" rows="5">
 text text text text text</textarea
           >
         </td>
@@ -119,5 +131,13 @@ alert('clicked')
     <br />
     <button id="cancel">cancel the last one</button>
     <br />
+
+    <footer>
+      <a href="https://github.com/daief/axew-toast" target="_blank"
+        >@axew/toast@<span id="version"
+          ><%= require('../package.json').version %></span
+        ></a
+      >
+    </footer>
   </body>
 </html>

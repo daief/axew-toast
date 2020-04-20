@@ -9,6 +9,8 @@ import '../src/style';
 
 // @ts-ignore
 window.axewToast = toast;
+// @ts-ignore
+window.axewToast.queueToast = queueToast;
 
 const select = (_: string) => document.querySelector(_) as any;
 
