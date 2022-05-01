@@ -71,9 +71,7 @@
       }
     </style>
     <meta name="description" content="axew toast daief" />
-    <% if (process.env.NODE_ENV === 'production') { %>
     <script src="https://daief.tech/_common/js/ga.js"></script>
-    <% } %>
   </head>
 
   <body>
@@ -95,7 +93,7 @@ text text text text text</textarea
       </tr>
       <tr>
         <td>timeout</td>
-        <td><input type="text" name="timeout" value="2500"/></td>
+        <td><input type="text" name="timeout" value="2500" /></td>
       </tr>
       <tr>
         <td>isModal</td>
@@ -113,7 +111,7 @@ text text text text text</textarea
       </tr>
       <tr>
         <td>className</td>
-        <td><input type="text" name="className" value=""/></td>
+        <td><input type="text" name="className" value="" /></td>
       </tr>
       <tr>
         <td>onClick</td>
@@ -133,11 +131,11 @@ alert('clicked')
     <br />
 
     <footer>
-      <a href="https://github.com/daief/axew-toast" target="_blank"
-        >@axew/toast@<span id="version"
-          ><%= require('../package.json').version %></span
-        ></a
-      >
+      <a href="https://github.com/daief/axew-toast" target="_blank">
+        @axew/toast@<span id="version">xx</span>
+      </a>
     </footer>
+
+    <script type="module" src="/index.ts"></script>
   </body>
 </html>

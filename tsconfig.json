@@ -11,7 +11,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "downlevelIteration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationDir": "dist"
   },
-  "include": ["src/**/*", "dev/**/*"]
+  "include": ["src/**/*"]
 }

@@ -1,11 +1,4 @@
-/*
- * @Author: daief
- * @LastEditors  : daief
- * @Date: 2019-08-15 16:04:14
- * @Description: 用于调试
- */
 import toast, { queueToast } from '../src';
-import '../src/style';
 
 // @ts-ignore
 window.axewToast = toast;

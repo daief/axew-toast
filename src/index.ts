@@ -15,6 +15,10 @@ import {
 } from './helper';
 import { MAX_TIMEOUT, CANCELED_MSG } from './constant';
 import { queueCtrl } from './Queue';
+// @ts-ignore
+import x from './style/index.less?inline';
+
+export { x };
 
 export default function toast(
   opts: IOptions,

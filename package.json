@@ -2,20 +2,18 @@
   "name": "@axew/toast",
   "version": "1.2.2",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "module": "./es/index.js",
   "scripts": {
-    "dev": "jugg dev -p 8880 -C .juggrc.dev.ts",
-    "dist": "HARD_SOURCE=none jugg build",
-    "lib": "jugg lib",
-    "build": "yarn dist && yarn lib",
+    "build:types": "tsc -p ./tsconfig.json --emitDeclarationOnly",
+    "build:dist": "vite build",
+    "build": "yarn build:dist && yarn build:types",
     "prepublishOnly": "yarn build",
-    "build:example": "HARD_SOURCE=none jugg build -C .juggrc.dev.ts"
+
+    "dev": "yarn vite --config vite.config.doc.ts"
   },
   "devDependencies": {
-    "@axew/jugg": "0.1.1",
-    "@axew/jugg-plugin-lib": "0.1.0",
-    "typescript": "^3.5.3"
+    "less": "^4.1.2",
+    "typescript": "^4.5.3",
+    "vite": "^2.9.6"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -26,6 +24,14 @@
     "lib",
     "es"
   ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
   "keywords": [
     "toast",
     "typescript",

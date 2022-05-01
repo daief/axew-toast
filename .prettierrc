@@ -1,7 +1,7 @@
 {
   "semi": true,
   "arrowParens": "avoid",
-  "singleQuote": true,
+  "singleQuote": "es5",
   "trailingComma": "all",
   "htmlWhitespaceSensitivity": "strict"
 }
