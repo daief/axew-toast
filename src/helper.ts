@@ -18,6 +18,8 @@ import {
 } from './constant';
 // import { modalCtrl } from './ModalCtrl';
 
+export const isBrowser = typeof window !== 'undefined';
+
 // 先将 ModalCtrl 移动到此处，以避免循环引用的问题
 export class ModalCtrl {
   modalDiv!: HTMLDivElement;
@@ -28,7 +30,7 @@ export class ModalCtrl {
   modalCount = 0;
 
   constructor() {
-    if (isBrowser()) {
+    if (isBrowser) {
       this.modalDiv = createDiv(MODAL_CLASS_NAME);
     }
   }
@@ -52,13 +54,9 @@ export const modalCtrl = new ModalCtrl();
 
 export function noop() {}
 
-export function isBrowser() {
-  return typeof window !== 'undefined';
-}
-
 export function guardOptions(
   opts: IOptions,
-  argTimeout?: number | true,
+  argTimeout?: number | true
 ): Readonly<Required<IObjectOptions>> {
   if (typeof opts === 'string') {
     opts = { text: opts };
@@ -133,7 +131,7 @@ export function createToastElAndShow(options: Required<IObjectOptions>) {
 export function removeEl(
   el: HTMLElement,
   rootEl: HTMLElement,
-  opts: Exclude<IOptions, boolean | string>,
+  opts: Exclude<IOptions, boolean | string>
 ) {
   let isCalled = false;
   const remove = () => {

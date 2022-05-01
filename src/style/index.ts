@@ -1,7 +1,9 @@
-/*
- * @Author: daief
- * @LastEditors: daief
- * @Date: 2019-08-15 15:56:08
- * @Description:
- */
-import './index.less';
+// @ts-ignore
+import css from './index.less?inline';
+import { isBrowser } from '../helper';
+
+if (isBrowser) {
+  const s = document.createElement('style');
+  s.innerHTML = css;
+  document.head.insertAdjacentElement('afterbegin', s);
+}

@@ -15,18 +15,14 @@ import {
 } from './helper';
 import { MAX_TIMEOUT, CANCELED_MSG } from './constant';
 import { queueCtrl } from './Queue';
-// @ts-ignore
-import x from './style/index.less?inline';
-
-export { x };
+import './style';
 
 export default function toast(
   opts: IOptions,
-  argTimeout?: number | true,
+  argTimeout?: number | true
 ): IToastResult {
   // SSR safe
-  // TODO maybe keep same login on server env
-  if (!isBrowser()) {
+  if (!isBrowser) {
     return getNoopResult();
   }
   const options = guardOptions(opts, argTimeout);
