@@ -14,121 +14,38 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>axew/toast</title>
-    <style>
-      button {
-        appearance: none;
-        -webkit-appearance: none;
-        display: inline-block;
-        font-size: 18px;
-        line-height: 28px;
-        text-align: center;
-        padding: 0 10px;
-        border: 1px solid grey;
-        border-radius: 5px;
-        margin: 7px;
-        outline: none;
-        color: #fff;
-        background: #66ccff;
-      }
-      button:active {
-        outline: none;
-        background-color: #6bbde6;
-      }
-      input[type='text'],
-      textarea {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-variant: tabular-nums;
-        line-height: 1.5;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        height: 32px;
-        padding: 4px 11px;
-        color: rgba(0, 0, 0, 0.65);
-        font-size: 14px;
-        line-height: 32px;
-        line-height: 1.5 \9;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        outline: none;
-      }
-      textarea {
-        height: 100px;
-      }
-      footer {
-        text-align: center;
-        margin-top: 100px;
-        font-size: 14px;
-      }
-      footer a {
-        color: #6bbde6;
-      }
-    </style>
     <meta name="description" content="axew toast daief" />
     <!-- __GOOGLE_GA__ -->
   </head>
 
   <body>
-    <table border="border">
-      <tr>
-        <td>text</td>
-        <td>
-          <textarea type="text" name="text" rows="5">
-text text text text text</textarea
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>loading</td>
-        <td>
-          <input type="radio" name="loading" value="false" checked />false
-          <input type="radio" name="loading" value="true" />true
-        </td>
-      </tr>
-      <tr>
-        <td>timeout</td>
-        <td><input type="text" name="timeout" value="2500" /></td>
-      </tr>
-      <tr>
-        <td>isModal</td>
-        <td>
-          <input type="radio" name="isModal" value="false" checked />false
-          <input type="radio" name="isModal" value="true" />true
-        </td>
-      </tr>
-      <tr>
-        <td>with queue</td>
-        <td>
-          <input type="radio" name="queue" value="false" checked />false
-          <input type="radio" name="queue" value="true" />true
-        </td>
-      </tr>
-      <tr>
-        <td>className</td>
-        <td><input type="text" name="className" value="" /></td>
-      </tr>
-      <tr>
-        <td>onClick</td>
-        <td>
-          <textarea type="text" name="onClick" value="">
-alert('clicked')
-          </textarea>
-        </td>
-      </tr>
-    </table>
+    <div class="optsWrap">
+      <div class="name">text</div>
+      <div class="item">
+        <textarea type="text" name="text" rows="5">Message</textarea>
+      </div>
 
-    <button id="toast">toast</button>
-    <br />
-    <button id="queue">toast a queue(without options above)</button>
-    <br />
-    <button id="cancel">cancel the last one</button>
-    <br />
+      <div class="name">icon(success, error, loading, ...)</div>
+      <div class="item">
+        <input type="text" name="icon" value="success" />
+      </div>
+
+      <div class="name">timeout</div>
+      <div class="item">
+        <input type="text" name="timeout" value="2500" />
+      </div>
+
+      <div class="name">isModal</div>
+      <div class="item">
+        <input type="radio" name="isModal" value="false" checked />false
+        <input type="radio" name="isModal" value="true" />true
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="toast">toast</button>
+      <button id="closeAll">close all</button>
+    </div>
 
     <footer>
       <a href="https://github.com/daief/axew-toast" target="_blank">

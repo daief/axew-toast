@@ -7,7 +7,8 @@
     "build:dist": "vite build",
     "build": "yarn build:dist && yarn build:types",
     "prepublishOnly": "yarn build",
-    "dev": "yarn vite --config vite.config.doc.ts"
+    "dev": "yarn vite --config vite.config.doc.ts",
+    "build:doc": "yarn vite build --config vite.config.doc.ts"
   },
   "devDependencies": {
     "less": "^4.1.2",

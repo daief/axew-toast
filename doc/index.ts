@@ -1,19 +1,38 @@
+import './index.less';
 import { toast } from '../src';
+import { fromEvent, map, scan } from 'rxjs';
 
 // @ts-ignore
 window.toast = toast;
 
-toast.config({ timeout: true });
+const getEl = (selector: string) => document.querySelector(selector);
+const getValue = (selector: string): string =>
+  (getEl(selector) as any).value || '';
 
-toast.show('info');
-toast.success('success');
-toast.error('error');
-toast.warning('warning');
-toast.show({
-  icon: 'https://img.alicdn.com/tfscom/TB1ioTnMVXXXXcXXVXXSutbFXXX.jpg_200x200.jpg',
-  text: 'long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text',
-});
-toast.show({
-  asHtml: true,
-  text: `render html <strong style="color: red">xxx</strong>`,
+const fromClick = (selector: string) => fromEvent(getEl(selector)!, 'click');
+
+const toast$ = fromClick('#toast')
+  .pipe(
+    scan(
+      () => ({
+        text: getValue('[name=text]'),
+        icon: getValue('[name=icon]'),
+        timeout: +getValue('[name=timeout]') || 2500,
+        isModal: getValue('[name=isModal]:checked') === 'true',
+      }),
+      {}
+    ),
+    map(opts => {
+      return toast.show({
+        ...opts,
+        onClick: () => {
+          alert(`Clicked: ${opts.text}`);
+        },
+      });
+    })
+  )
+  .subscribe(() => {});
+
+fromClick('#closeAll').subscribe(() => {
+  toast.destroyAll();
 });
