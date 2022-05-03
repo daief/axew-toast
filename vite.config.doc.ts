@@ -3,7 +3,7 @@ import pkg from './package.json';
 
 export default defineConfig({
   root: 'doc',
-  base: '/axew-toast/',
+  base: './',
   plugins: [
     // @ts-ignore
     {
