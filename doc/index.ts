@@ -11,7 +11,7 @@ const getValue = (selector: string): string =>
 
 const fromClick = (selector: string) => fromEvent(getEl(selector)!, 'click');
 
-const toast$ = fromClick('#toast')
+fromClick('#toast')
   .pipe(
     scan(
       () => ({
@@ -19,6 +19,7 @@ const toast$ = fromClick('#toast')
         icon: getValue('[name=icon]'),
         timeout: +getValue('[name=timeout]') || 2500,
         isModal: getValue('[name=isModal]:checked') === 'true',
+        asHtml: getValue('[name=asHtml]:checked') === 'true',
       }),
       {}
     ),
