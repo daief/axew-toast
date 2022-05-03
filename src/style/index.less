@@ -8,6 +8,14 @@
   transform: translate3d(0, 100%, 0) scale(0);
 }
 
+.end() {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  max-height: 150px;
+  padding: 6px;
+  margin-bottom: 8px;
+}
+
 .@{prefix} {
   &-root {
     position: fixed;
@@ -63,7 +71,6 @@
 
   &-hide {
     animation-name: axewToastFadeOutDown;
-    animation-timing-function: ease-out;
   }
 
   &-icon {
@@ -94,7 +101,7 @@
 
 @keyframes axewToastFadeOutDown {
   0% {
-    opacity: 1;
+    .end();
   }
   to {
     .init();

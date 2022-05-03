@@ -1,6 +1,6 @@
-import iconSuccess from './icons/success.png';
-import iconError from './icons/error.png';
-import iconWarning from './icons/warning.png';
+import iconSuccess from './icons/success.svg';
+import iconError from './icons/error.svg';
+import iconWarning from './icons/warning.svg';
 
 export const ANIMATE_DURATION = 500;
 export const PREFIX = 'axew-toast';
