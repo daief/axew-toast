@@ -1,73 +1,19 @@
-import toast, { queueToast } from '../src';
+import { toast } from '../src';
 
 // @ts-ignore
-window.axewToast = toast;
-// @ts-ignore
-window.axewToast.queueToast = queueToast;
+window.toast = toast;
 
-const select = (_: string) => document.querySelector(_) as any;
+toast.config({ timeout: true });
 
-const $toast: HTMLButtonElement = select('#toast');
-const $cancel: HTMLButtonElement = select('#cancel');
-const $queue: HTMLButtonElement = select('#queue');
-
-let queue: any[] = [];
-
-const getRadioValue = (name: string) => {
-  const value = select(`input[name=${name}]:checked`).value;
-  return value === 'true';
-};
-
-const getInputValue = (name: string) => {
-  return (select(`input[name=${name}]`) || select(`textarea[name=${name}]`))
-    .value;
-};
-
-$toast.addEventListener('click', () => {
-  const text = getInputValue('text');
-  const loading = getRadioValue('loading');
-  let timeout = getInputValue('timeout');
-  timeout = timeout === 'true' ? true : +timeout || 0;
-  const isModal = getRadioValue('isModal');
-  const isQueue = getRadioValue('queue');
-  const className = getInputValue('className');
-  const onClick = getInputValue('onClick');
-
-  const { cancel, promise } = toast({
-    text,
-    loading,
-    timeout,
-    isModal,
-    className,
-    queue: isQueue,
-    onClick: () => {
-      try {
-        eval(onClick);
-      } catch (_) {
-        console.warn('Click event handler has some error', _);
-      }
-    },
-  });
-  promise.then(() => {
-    const i = queue.findIndex(_ => cancel);
-    if (i > -1) {
-      queue[i] = null;
-      queue = queue.filter(_ => !!_);
-    }
-  });
-  queue.push(cancel);
+toast.info('info');
+toast.success('success');
+toast.error('error');
+toast.warning('warning');
+toast.info({
+  icon: 'https://img.alicdn.com/tfscom/TB1ioTnMVXXXXcXXVXXSutbFXXX.jpg_200x200.jpg',
+  text: 'long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text',
 });
-
-$cancel.addEventListener('click', () => {
-  const first = queue.shift();
-  if (first) {
-    first();
-  }
-});
-
-$queue.addEventListener('click', () => {
-  ['1st', '2nd', '3rd'].forEach(_ => {
-    const { cancel } = queueToast(_);
-    queue.push(cancel);
-  });
+toast.info({
+  asHtml: true,
+  text: 'render html <strong style="color: red">xxx</strong>',
 });

@@ -1,10 +1,3 @@
-/*
- * @Author: daief
- * @LastEditors: daief
- * @Date: 2019-12-17 16:14:34
- * @LastEditTime: 2019-12-17 20:46:11
- * @Description:
- */
 export interface IEventHandler {
   (this: HTMLDivElement, ev: MouseEvent): void;
   options?: boolean | AddEventListenerOptions;
@@ -16,11 +9,23 @@ export interface IObjectOptions {
    */
   text?: string;
   /**
-   * 是否 loading
+   * 使用 html 的方式渲染文本
    */
-  loading?: boolean;
+  asHtml?: boolean;
   /**
-   * 延迟
+   * 定义 icon 类型（或 icon 链接）
+   */
+  icon?: 'success' | 'error' | 'warning' | 'loading' | string;
+  /**
+   * @default 36
+   */
+  iconSize?: number | string;
+  /**
+   * icon 为 loading 时为 true
+   */
+  iconSpin?: boolean;
+  /**
+   * 延迟，true 代表一直存在
    * @default 2500
    */
   timeout?: number | true;
@@ -37,19 +42,13 @@ export interface IObjectOptions {
    */
   onClick?: IEventHandler;
   /**
-   * 队列模式
-   * @since 1.2.0
+   * 关闭事件
    */
-  queue?: boolean;
+  onClose?: (type: 'auto' | 'cancel') => void;
 }
 
-export type IOptions = true | string | IObjectOptions;
+export type IOptions = IObjectOptions | string;
 
-export interface IToastResult {
-  promise: Promise<void>;
-  cancel: () => void;
-}
-
-export interface IQueueItem {
-  onExcute: () => any;
+export interface IToastFunction {
+  (argOpts: IOptions, timeout?: number): VoidFunction;
 }

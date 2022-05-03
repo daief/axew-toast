@@ -1,132 +1,157 @@
-/*
- * @Author: daief
- * @LastEditors  : daief
- * @Date: 2019-12-17 17:06:54
- * @LastEditTime : 2020-01-17 14:48:06
- * @Description:
- */
-import { IOptions, IToastResult } from './interface';
 import {
-  guardOptions,
-  createToastElAndShow,
-  removeEl,
+  ANIMATE_DURATION,
+  clsContent,
+  clsHide,
+  icons,
   isBrowser,
-  getNoopResult,
-} from './helper';
-import { MAX_TIMEOUT, CANCELED_MSG } from './constant';
-import { queueCtrl } from './Queue';
+  noop,
+  clsText,
+  clsContainer,
+  clsSpin,
+  clsIcon,
+} from './constant';
+import { IObjectOptions, IToastFunction } from './interface';
+import { cls, cssUnit, guardOptions, handleArgs } from './utils';
 import './style';
+import { hideModal, showModal } from './modal';
+import { insertToastEl, removeToastEl } from './container';
 
-export default function toast(
-  opts: IOptions,
-  argTimeout?: number | true
-): IToastResult {
-  // SSR safe
-  if (!isBrowser) {
-    return getNoopResult();
-  }
-  const options = guardOptions(opts, argTimeout);
-  const { timeout, queue } = options;
+function createDiv(className: string): HTMLDivElement {
+  const el = document.createElement('div');
+  el.setAttribute('class', className);
+  return el;
+}
 
-  let resolve: any;
-  let reject: any;
-  let timer: any;
-  let elements: ReturnType<typeof createToastElAndShow>;
-  let promise = new Promise<void>((r1, r2) => {
-    resolve = r1;
-    reject = r2;
-  });
-
-  if (queue) {
-    let queueResolve: any;
-    let queueReject: any;
-    const queuePromise = new Promise((r1, r2) => {
-      queueResolve = r1;
-      queueReject = r2;
-    })
-      .then(() => {
-        // 队列内 promsie 结束后，改变最外层 promise 状态
-        if (elements) {
-          removeEl(elements.content, elements.container, options);
-        }
-        resolve();
-      })
-      .catch(() => {
-        // 被取消
-        clearTimeout(timer);
-        if (elements) {
-          removeEl(elements.content, elements.container, options);
-        }
-      });
-
-    const queueItem = {
-      onExcute: () => {
-        // 执行到此处逻辑 toast 才会显示
-        elements = createToastElAndShow(options);
-        if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
-          timer = setTimeout(queueResolve, timeout); // toast 执行结束
-        }
-        return queuePromise;
-      },
-    };
-
-    // 先存入队列
-    queueCtrl.push(queueItem);
-    queueCtrl.execute();
-
-    // 外部人为调用了 cancel
-    promise = promise.catch(error => {
-      // 但有两种情况
-      //  - 处于队列时就被取消了
-      //  - 弹出的过程中被取消
-
-      // 还在队列中，则提前移除
-      queueCtrl.remove(queueItem);
-
-      // 弹出过程中无需特殊处理
-      // ---
-
-      queueReject();
-
-      throw error;
-    });
-  } else {
-    elements = createToastElAndShow(options);
-    if (typeof timeout === 'number' && timeout <= MAX_TIMEOUT) {
-      timer = setTimeout(resolve, timeout);
+/**
+ * 监听动画，动画结束时移除元素
+ * @param el 动画目标元素
+ * @param containerEl 根元素
+ * @param onRemoved
+ */
+export function removeEl(
+  el: HTMLElement,
+  containerEl: HTMLElement,
+  onRemoved?: VoidFunction
+) {
+  let isCalled = false;
+  const remove = () => {
+    if (isCalled) {
+      return;
     }
-    promise = promise
-      .then(() => removeEl(elements.content, elements.container, options))
-      .catch(error => {
-        removeEl(elements.content, elements.container, options);
-        throw error;
-      });
+    isCalled = true;
+    removeToastEl(containerEl);
+    onRemoved?.();
+  };
+  el.classList.add(clsHide);
+  el.addEventListener('animationend', remove);
+  // force remove
+  // 以防 animationend 未触发
+  setTimeout(remove, ANIMATE_DURATION);
+}
+
+export function createToastElAndShow(options: Required<IObjectOptions>) {
+  const { text, className, onClick, icon, iconSpin, iconSize, asHtml } =
+    options;
+  const container = createDiv(cls(clsContainer, className));
+  const content = createDiv(clsContent);
+
+  if (onClick !== noop) {
+    content.addEventListener('click', onClick, onClick.options);
   }
+
+  let contentHtmlStr = '';
+
+  const iconSrc = icons[icon] || icon;
+  if (iconSrc) {
+    contentHtmlStr += `<i class="${cls(clsIcon, {
+      [clsSpin]: iconSpin,
+    })}" style="background-image:url(${iconSrc});width:${cssUnit(
+      iconSize
+    )};height:${cssUnit(iconSize)}"></i>`;
+  }
+
+  if (text) {
+    const textContent = asHtml
+      ? text
+      : ((content.textContent = text), content.innerHTML);
+    contentHtmlStr += `<div class="${clsText}">${textContent}</div>`;
+  }
+
+  content.innerHTML = contentHtmlStr;
+
+  container.appendChild(content);
 
   return {
-    promise,
-    cancel: () => {
-      clearTimeout(timer);
-      reject(new Error(CANCELED_MSG));
+    container,
+    content,
+  };
+}
+
+export function createToast(initCfg?: Partial<IObjectOptions>) {
+  let uns = new Set<VoidFunction>();
+  let cacheCfg: Partial<IObjectOptions> = { ...initCfg };
+
+  const info: IToastFunction = (argOpts, timeout): VoidFunction => {
+    if (!isBrowser) {
+      return noop;
+    }
+
+    const options = guardOptions(cacheCfg, argOpts, timeout);
+
+    const elements = createToastElAndShow(options);
+    insertToastEl(elements.container);
+    if (options.isModal) showModal();
+
+    const cancel = (type: 'auto' | 'cancel') => {
+      removeEl(elements.content, elements.container, () => {
+        hideModal();
+        options.onClose(type);
+      });
+    };
+
+    const un = () => {
+      cancel('cancel');
+      uns.delete(un);
+    };
+
+    uns.add(un);
+
+    if (options.timeout && typeof options.timeout === 'number') {
+      setTimeout(() => {
+        cancel('auto');
+      }, options.timeout);
+    }
+
+    return () => cancel('cancel');
+  };
+
+  const success: IToastFunction = (arg1, arg2) => {
+    return info({ icon: 'success', ...handleArgs(arg1, arg2) });
+  };
+
+  const error: IToastFunction = (arg1, arg2) => {
+    return info({ icon: 'error', ...handleArgs(arg1, arg2) });
+  };
+
+  const warning: IToastFunction = (arg1, arg2) => {
+    return info({ icon: 'warning', ...handleArgs(arg1, arg2) });
+  };
+
+  return {
+    info,
+    success,
+    error,
+    warning,
+    destroyAll: () => {
+      uns.forEach(un => {
+        un();
+      });
+      uns = new Set();
+    },
+    config: (opts: Partial<IObjectOptions>) => {
+      cacheCfg = opts;
     },
   };
 }
 
-/**
- * default enable `queue` toast
- * @since 1.2.0
- * @param opts
- * @param argTimeout
- */
-function queueToast(opts: IOptions, argTimeout?: number | true): IToastResult {
-  if (typeof opts === 'string') {
-    opts = { text: opts, queue: true };
-  } else if (typeof opts === 'boolean') {
-    opts = { loading: opts, queue: true };
-  } else if (opts && opts.queue !== void 0) {
-    opts.queue = true;
-  }
-  return toast(opts, argTimeout);
-}
-
-export { toast, queueToast };
+export const toast = createToast();
