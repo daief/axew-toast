@@ -60,7 +60,7 @@ API.
 
 ```ts
 export declare function createToast(initCfg?: Partial<IObjectOptions>): {
-  info: IToastFunction;
+  show: IToastFunction;
   success: IToastFunction;
   error: IToastFunction;
   warning: IToastFunction;
@@ -69,7 +69,7 @@ export declare function createToast(initCfg?: Partial<IObjectOptions>): {
   config: (opts: Partial<IObjectOptions>) => void;
 };
 export declare const toast: {
-  info: IToastFunction;
+  show: IToastFunction;
   success: IToastFunction;
   error: IToastFunction;
   warning: IToastFunction;
