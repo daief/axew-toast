@@ -20,13 +20,18 @@ $ npm i @axew/toast
 ```
 
 ```js
-import toast from '@axew/toast';
+import toast, { createToast } from '@axew/toast';
 
-toast.show('This a message');
+toast.show('This a message. It will be hidden in 2.5 seconds.');
 
 toast.show('This a message', 3000);
 
-toast.success('This a message');
+toast.success('This a message', 3000);
+
+// preset a common config
+toast.config({ timeout: 3000 });
+
+toast.show('This message will be hidden in 3 seconds.');
 
 // loading style
 toast.loading('Loading...');
@@ -52,8 +57,14 @@ const cancel = toast.show(
 );
 
 setTimeout(() => {
-  cancel();
+  cancel(); // console.log('cancel');
 }, 1000);
+
+// close all toast created by the instance
+toast.destroyAll();
+
+// create a new toast instance
+const toast2 = createToast();
 ```
 
 API.
