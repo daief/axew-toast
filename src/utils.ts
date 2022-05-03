@@ -1,7 +1,7 @@
 import { noop } from './constant';
 import { IObjectOptions, IOptions } from './interface';
 
-export function handleArgs(argOpts: IOptions, timeout?: number | true) {
+export function handleArgs(argOpts?: IOptions, timeout?: number | true) {
   return {
     timeout,
     ...(typeof argOpts === 'string' ? { text: argOpts } : argOpts),
@@ -10,15 +10,15 @@ export function handleArgs(argOpts: IOptions, timeout?: number | true) {
 
 export function guardOptions(
   base: IObjectOptions,
-  opts: IOptions,
+  opts?: IOptions,
   argTimeout?: number | true
-): Readonly<Required<IObjectOptions>> {
-  if (typeof opts === 'string') {
-    opts = { text: opts };
+): Readonly<Required<IObjectOptions> & { text: string }> {
+  if (typeof opts !== 'object') {
+    opts = { text: opts || '' };
   }
 
   const options: Required<IObjectOptions> = {
-    text: '',
+    text: '' as string,
     asHtml: false,
     className: '',
     isModal: false,
@@ -29,7 +29,7 @@ export function guardOptions(
     onClose: noop,
     ...base,
     ...opts,
-    timeout: opts.timeout || base.timeout || argTimeout || 2500,
+    timeout: argTimeout || opts.timeout || base.timeout || 2500,
   };
 
   if (options.icon === 'loading') {
@@ -40,7 +40,10 @@ export function guardOptions(
     options.onClick = noop;
   }
 
-  return options;
+  return {
+    ...options,
+    text: String(options.text || ''),
+  };
 }
 
 export function cls(

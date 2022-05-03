@@ -28,7 +28,7 @@ function createDiv(className: string): HTMLDivElement {
  * @param containerEl 根元素
  * @param onRemoved
  */
-export function removeEl(
+function removeEl(
   el: HTMLElement,
   containerEl: HTMLElement,
   onRemoved?: VoidFunction
@@ -49,7 +49,7 @@ export function removeEl(
   setTimeout(remove, ANIMATE_DURATION);
 }
 
-export function createToastElAndShow(options: Required<IObjectOptions>) {
+function createToastElAndShow(options: ReturnType<typeof guardOptions>) {
   const { text, className, onClick, icon, iconSpin, iconSize, asHtml } =
     options;
   const container = createDiv(cls(clsContainer, className));
@@ -79,7 +79,9 @@ export function createToastElAndShow(options: Required<IObjectOptions>) {
 
   content.innerHTML = contentHtmlStr;
 
-  container.appendChild(content);
+  if (contentHtmlStr) {
+    container.appendChild(content);
+  }
 
   return {
     container,
@@ -91,7 +93,7 @@ export function createToast(initCfg?: Partial<IObjectOptions>) {
   let uns = new Set<VoidFunction>();
   let cacheCfg: Partial<IObjectOptions> = { ...initCfg };
 
-  const info: IToastFunction = (argOpts, timeout): VoidFunction => {
+  const show: IToastFunction = (argOpts, timeout): VoidFunction => {
     if (!isBrowser) {
       return noop;
     }
@@ -126,22 +128,27 @@ export function createToast(initCfg?: Partial<IObjectOptions>) {
   };
 
   const success: IToastFunction = (arg1, arg2) => {
-    return info({ icon: 'success', ...handleArgs(arg1, arg2) });
+    return show({ icon: 'success', ...handleArgs(arg1, arg2) });
   };
 
   const error: IToastFunction = (arg1, arg2) => {
-    return info({ icon: 'error', ...handleArgs(arg1, arg2) });
+    return show({ icon: 'error', ...handleArgs(arg1, arg2) });
   };
 
   const warning: IToastFunction = (arg1, arg2) => {
-    return info({ icon: 'warning', ...handleArgs(arg1, arg2) });
+    return show({ icon: 'warning', ...handleArgs(arg1, arg2) });
+  };
+
+  const loading: IToastFunction = (arg1, arg2) => {
+    return show({ icon: 'loading', ...handleArgs(arg1, arg2) });
   };
 
   return {
-    info,
+    show,
     success,
     error,
     warning,
+    loading,
     destroyAll: () => {
       uns.forEach(un => {
         un();
@@ -155,3 +162,5 @@ export function createToast(initCfg?: Partial<IObjectOptions>) {
 }
 
 export const toast = createToast();
+
+export default toast;
