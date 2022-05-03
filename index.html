@@ -16,7 +16,7 @@
     <title>axew/toast</title>
     <meta name="description" content="axew toast daief" />
     <script src="/def-common/js/ga.js"></script>
-    <script type="module" crossorigin src="./assets/index.7474f77f.js"></script>
+    <script type="module" crossorigin src="./assets/index.ac81f83d.js"></script>
     <link rel="stylesheet" href="./assets/index.1742920c.css">
   </head>
 
@@ -24,7 +24,9 @@
     <div class="optsWrap">
       <div class="name">text</div>
       <div class="item">
-        <textarea type="text" name="text" rows="5">Message</textarea>
+        <textarea type="text" name="text" rows="5">
+Message. <strong style="color: red">red text</strong></textarea
+        >
       </div>
 
       <div class="name">icon(success, error, loading, ...)</div>
@@ -35,6 +37,12 @@
       <div class="name">timeout</div>
       <div class="item">
         <input type="text" name="timeout" value="2500" />
+      </div>
+
+      <div class="name">asHtml</div>
+      <div class="item">
+        <input type="radio" name="asHtml" value="false" checked />false
+        <input type="radio" name="asHtml" value="true" />true
       </div>
 
       <div class="name">isModal</div>
