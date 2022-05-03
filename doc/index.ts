@@ -20,15 +20,18 @@ fromClick('#toast')
         timeout: +getValue('[name=timeout]') || 2500,
         isModal: getValue('[name=isModal]:checked') === 'true',
         asHtml: getValue('[name=asHtml]:checked') === 'true',
+        bindClick: getValue('[name=bindClick]:checked') === 'true',
       }),
       {}
     ),
     map(opts => {
       return toast.show({
         ...opts,
-        onClick: () => {
-          alert(`Clicked: ${opts.text}`);
-        },
+        onClick: opts.bindClick
+          ? () => {
+              alert(`Clicked: ${opts.text}`);
+            }
+          : void 0,
       });
     })
   )
