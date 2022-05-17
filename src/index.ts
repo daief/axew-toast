@@ -10,7 +10,7 @@ import {
   clsSpin,
   clsIcon,
 } from './constant';
-import { IObjectOptions, IToastFunction } from './interface';
+import { IObjectOptions, IToastFunction, IOptions } from './interface';
 import { cls, cssUnit, guardOptions, handleArgs } from './utils';
 import './style';
 import { hideModal, showModal } from './modal';
@@ -163,4 +163,14 @@ export function createToast(initCfg?: Partial<IObjectOptions>) {
 
 export const toast = createToast();
 
-export default toast;
+/**
+ * same as `toast.show`
+ * @deprecated use `toast.show`
+ */
+const defaultExportFunction = (...args: Parameters<IToastFunction>) => {
+  return toast.show(...args);
+};
+
+export default Object.assign(defaultExportFunction, toast);
+
+export { IOptions, IToastFunction };

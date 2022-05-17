@@ -68,7 +68,7 @@ export interface IObjectOptions {
   onClose?: (why: 'auto' | 'cancel') => void;
 }
 
-export type IOptions = IObjectOptions | string;
+export type IOptions = IObjectOptions | string | number;
 
 export interface IToastFunction {
   (argOpts?: IOptions, timeout?: number): VoidFunction;

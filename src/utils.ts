@@ -4,7 +4,7 @@ import { IObjectOptions, IOptions } from './interface';
 export function handleArgs(argOpts?: IOptions, timeout?: number | true) {
   return {
     timeout,
-    ...(typeof argOpts === 'string' ? { text: argOpts } : argOpts),
+    ...(typeof argOpts === 'object' ? argOpts : { text: argOpts || '' }),
   } as IObjectOptions;
 }
 
