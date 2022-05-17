@@ -10,7 +10,7 @@ import {
   clsSpin,
   clsIcon,
 } from './constant';
-import { IObjectOptions, IToastFunction, IOptions } from './interface';
+import { IObjectOptions, IToastFunction } from './interface';
 import { cls, cssUnit, guardOptions, handleArgs } from './utils';
 import './style';
 import { hideModal, showModal } from './modal';
@@ -173,4 +173,4 @@ const defaultExportFunction = (...args: Parameters<IToastFunction>) => {
 
 export default Object.assign(defaultExportFunction, toast);
 
-export { IOptions, IToastFunction };
+export * from './interface';
