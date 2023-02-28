@@ -140,7 +140,12 @@ export function createToast(initCfg?: Partial<IObjectOptions>) {
   };
 
   const loading: IToastFunction = (arg1, arg2) => {
-    return show({ icon: 'loading', ...handleArgs(arg1, arg2) });
+    const finalArg = handleArgs(arg1, arg2);
+    return show({
+      icon: 'loading',
+      ...finalArg,
+      timeout: finalArg.timeout ?? true,
+    });
   };
 
   return {

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.3 - 2023-02-28
+
+- 🐛 fix: loading timeout default true
+
 ## 2.0.2 - 2023-02-27
 
 - 🐛 fix: types declare in package.json
