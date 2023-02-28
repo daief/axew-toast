@@ -29,12 +29,19 @@ export function guardOptions(
     onClose: noop,
     ...base,
     ...opts,
-    timeout: argTimeout || opts.timeout || base.timeout || 2500,
+    timeout: 0,
   };
 
+  let finalTimeout = argTimeout || opts.timeout || 0;
+
   if (options.icon === 'loading') {
+    finalTimeout ||= true;
     options.iconSpin = true;
+  } else {
+    finalTimeout = finalTimeout || base.timeout || 2500;
   }
+
+  options.timeout = finalTimeout;
 
   if (typeof options.onClick !== 'function') {
     options.onClick = noop;
